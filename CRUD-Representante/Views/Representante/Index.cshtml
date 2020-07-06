@@ -1,0 +1,154 @@
+﻿@model IEnumerable<CRUD_Representante.Models.Representante>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+<h2>Lista de Representantes</h2>
+
+<div class="container" style="width:40%;margin-top:2%">
+
+    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Agregar Representante</a>
+
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                    <h3 class="modal-title">Agregar</h3>
+
+                </div>
+
+                <div class="modal-body">
+                    @using (Html.BeginForm("Agregar2", "Representante", FormMethod.Post, new { @class = "myForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-group">
+                            <text>Nombres</text> @Html.TextBox("nombre")
+                        </div>
+                        <div class="form-group">
+                            <text>Apellidos</text> @Html.TextBox("apellido")
+                        </div>
+                        <div class="form-group">
+                            <text>Parentesco</text> @Html.TextBox("parentesco")
+                        </div>
+                        <div class="form-group">
+                            <text>Teléfono</text> @Html.TextBox("telefono")
+                        </div>
+                        
+                     }
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-default" data-dismiss="modal">Cancel</a>
+                    <input type="reset" value="Submit" class="btn btn-success" onclick="submit_by_class()" />
+
+                 </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<p>
+    @Html.ActionLink("Agregar Representante", "Agregar")
+</p>
+
+
+
+<p>
+    <b>
+        Buscar:
+    </b>
+    @using (Html.BeginForm("Index", "Representante", FormMethod.Get))
+    {
+        @Html.RadioButton("searchBy", "Nombres", true) <text>Nombres</text>
+        @Html.RadioButton("searchBy", "Apellidos") <text>Apellidos</text> <br />
+        @Html.TextBox("search") <input type="submit" value="Buscar" class="btn btn-default" />
+    }
+</p>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Cedula)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nombres)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Apellidos)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Parentesco)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Telefono)
+        </th>
+        <th></th>
+    </tr>
+
+    @if (Model.Count() == 0)
+    {
+        <tr>
+            <td colspan="5"> Su búsqueda no tuvo coincidencias</td>
+        </tr>
+    }
+    else
+    {
+
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cedula)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombres)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellidos)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Parentesco)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Telefono)
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "Editar", new { cedula = item.Cedula }) |
+                    @Html.ActionLink("Detalles", "Detalles", new { cedula = item.Cedula }) |
+                    @Html.ActionLink("Eliminar", "Eliminar", new { cedula = item.Cedula }, new { @class = "aEliminar" })
+                </td>
+            </tr>
+        }
+    }
+
+</table>
+@section scripts{
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script>
+        $(".aEliminar").click(function (event) {
+            if (!confirm('¿Estás seguro que quieres eliminar?')) {
+                event.preventDefault();
+            }
+        });
+    </script>
+    <script>
+
+        function submit_by_class() {
+            var name = document.getElementById("nombre").value
+            var x = document.getElementsByClassName("myForm");  
+            x[0].submit();
+
+        }
+
+
+    </script>
+}
